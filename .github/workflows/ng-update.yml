@@ -1,12 +1,13 @@
 name: "Update Angular Action"
+
 on: 
   schedule:
     - cron: '30 5 * * 1,3,5'
   
-  # 1. Adds the "Run workflow" button in GitHub Actions tab
+  # Adds the "Run workflow" button in GitHub Actions tab
   workflow_dispatch: 
 
-  # 2. Runs on every push to the main branch
+  # Runs on every push to the main branch
   push:
     branches:
       - main 
@@ -19,6 +20,18 @@ jobs:
   ngxUptodate:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install local project dependencies
+        run: npm ci
+        working-directory: ./crud-angular
+
       - name: Updating ng dependencies 
         uses: fast-facts/ng-update@v1
         with:
